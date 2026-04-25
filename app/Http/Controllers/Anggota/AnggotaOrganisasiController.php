@@ -15,7 +15,7 @@ class AnggotaOrganisasiController extends Controller
         $query = Organisasi::where('status', 'aktif')->withCount('anggotaAktif');
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
 
         if ($request->filled('category')) {

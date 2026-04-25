@@ -1,6 +1,6 @@
 import { Head, usePage } from '@inertiajs/react';
+import { Users, Building2, Calendar, UserPlus } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
-import { Users, Building2, Calendar, Megaphone, TrendingUp, UserPlus } from 'lucide-react';
 
 interface Stats {
     totalUsers: number;

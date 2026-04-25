@@ -7,7 +7,6 @@ use App\Models\Kegiatan;
 use App\Models\Organisasi;
 use App\Models\Pengumuman;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class AdminDashboardController extends Controller

@@ -22,7 +22,7 @@ class PengurusKegiatanController extends Controller
         $query = Kegiatan::whereIn('organisasi_id', $orgIds)->with('organisasi:id,name');
 
         if ($request->filled('search')) {
-            $query->where('judul', 'like', '%' . $request->search . '%');
+            $query->where('judul', 'like', '%'.$request->search.'%');
         }
 
         if ($request->filled('status')) {
@@ -54,7 +54,7 @@ class PengurusKegiatanController extends Controller
         $orgIds = $this->getOrgIds($request);
 
         $validated = $request->validate([
-            'organisasi_id' => 'required|exists:organisasis,id|in:' . $orgIds->implode(','),
+            'organisasi_id' => 'required|exists:organisasis,id|in:'.$orgIds->implode(','),
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'tanggal_mulai' => 'required|date',
@@ -96,7 +96,7 @@ class PengurusKegiatanController extends Controller
         }
 
         $validated = $request->validate([
-            'organisasi_id' => 'required|exists:organisasis,id|in:' . $orgIds->implode(','),
+            'organisasi_id' => 'required|exists:organisasis,id|in:'.$orgIds->implode(','),
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'tanggal_mulai' => 'required|date',

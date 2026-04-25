@@ -1,7 +1,6 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
-import { Plus, Search, Pencil, Trash2 } from 'lucide-react';
-import { useState } from 'react';
 
 interface Kegiatan { id: number; judul: string; status: string; tanggal_mulai: string; lokasi: string; organisasi?: { name: string }; }
 interface Props { kegiatans: { data: Kegiatan[]; links: Array<{ url: string | null; label: string; active: boolean }> }; filters: { search?: string; status?: string }; flash: { success?: string }; }
@@ -9,8 +8,8 @@ const breadcrumbs = [{ title: 'Pengurus Dashboard', href: '/pengurus/dashboard' 
 const statusColors: Record<string, string> = { draft: 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300', published: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400', selesai: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' };
 
 export default function KegiatanIndex() {
-    const { kegiatans, filters, flash } = usePage().props as unknown as Props;
-    const [search, setSearch] = useState(filters.search || '');
+    const { kegiatans, flash } = usePage().props as unknown as Props;
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Kelola Kegiatan" />
@@ -30,7 +29,11 @@ export default function KegiatanIndex() {
                                     <td className="px-6 py-4 text-zinc-600 dark:text-zinc-400">{k.organisasi?.name}</td>
                                     <td className="px-6 py-4 text-zinc-600 dark:text-zinc-400">{new Date(k.tanggal_mulai).toLocaleDateString('id-ID')}</td>
                                     <td className="px-6 py-4"><span className={`rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${statusColors[k.status]}`}>{k.status}</span></td>
-                                    <td className="px-6 py-4 text-right"><div className="flex items-center justify-end gap-2"><Link href={`/pengurus/kegiatan/${k.id}/edit`} className="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 hover:text-indigo-600 dark:hover:bg-zinc-800"><Pencil className="h-4 w-4" /></Link><button onClick={() => { if (confirm('Yakin?')) router.delete(`/pengurus/kegiatan/${k.id}`); }} className="rounded-lg p-2 text-zinc-500 hover:bg-red-50 hover:text-red-600"><Trash2 className="h-4 w-4" /></button></div></td>
+                                    <td className="px-6 py-4 text-right"><div className="flex items-center justify-end gap-2"><Link href={`/pengurus/kegiatan/${k.id}/edit`} className="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 hover:text-indigo-600 dark:hover:bg-zinc-800"><Pencil className="h-4 w-4" /></Link><button onClick={() => {
+ if (confirm('Yakin?')) {
+router.delete(`/pengurus/kegiatan/${k.id}`);
+} 
+}} className="rounded-lg p-2 text-zinc-500 hover:bg-red-50 hover:text-red-600"><Trash2 className="h-4 w-4" /></button></div></td>
                                 </tr>
                             ))}
                             {kegiatans.data.length === 0 && <tr><td colSpan={5} className="py-12 text-center text-zinc-400">Belum ada kegiatan</td></tr>}

@@ -5,12 +5,15 @@ const breadcrumbs = [{ title: 'Pengurus Dashboard', href: '/pengurus/dashboard' 
 
 export default function KegiatanCreate({ organisasis }: { organisasis: Org[] }) {
     const { data, setData, post, processing, errors } = useForm({ organisasi_id: organisasis[0]?.id?.toString() || '', judul: '', deskripsi: '', tanggal_mulai: '', tanggal_selesai: '', lokasi: '', status: 'draft' });
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Buat Kegiatan" />
             <div className="mx-auto max-w-3xl p-4 md:p-6">
                 <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-100">Buat Kegiatan Baru</h1>
-                <form onSubmit={(e) => { e.preventDefault(); post('/pengurus/kegiatan'); }} className="space-y-6 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+                <form onSubmit={(e) => {
+ e.preventDefault(); post('/pengurus/kegiatan'); 
+}} className="space-y-6 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
                     <div className="grid gap-6 sm:grid-cols-2">
                         <div><label className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Organisasi *</label><select value={data.organisasi_id} onChange={(e) => setData('organisasi_id', e.target.value)} className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">{organisasis.map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}</select>{errors.organisasi_id && <p className="mt-1 text-xs text-red-500">{errors.organisasi_id}</p>}</div>
                         <div><label className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Judul *</label><input type="text" value={data.judul} onChange={(e) => setData('judul', e.target.value)} className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100" />{errors.judul && <p className="mt-1 text-xs text-red-500">{errors.judul}</p>}</div>

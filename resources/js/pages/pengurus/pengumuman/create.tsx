@@ -4,10 +4,13 @@ interface Org { id: number; name: string; }
 const breadcrumbs = [{ title: 'Pengurus Dashboard', href: '/pengurus/dashboard' }, { title: 'Pengumuman', href: '/pengurus/pengumuman' }, { title: 'Buat', href: '#' }];
 export default function PengumumanCreate({ organisasis }: { organisasis: Org[] }) {
     const { data, setData, post, processing, errors } = useForm({ organisasi_id: organisasis[0]?.id?.toString() || '', judul: '', konten: '', is_pinned: false });
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}><Head title="Buat Pengumuman" />
             <div className="mx-auto max-w-3xl p-4 md:p-6"><h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-100">Buat Pengumuman</h1>
-                <form onSubmit={(e) => { e.preventDefault(); post('/pengurus/pengumuman'); }} className="space-y-6 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+                <form onSubmit={(e) => {
+ e.preventDefault(); post('/pengurus/pengumuman'); 
+}} className="space-y-6 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
                     <div><label className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Organisasi *</label><select value={data.organisasi_id} onChange={(e) => setData('organisasi_id', e.target.value)} className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">{organisasis.map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}</select></div>
                     <div><label className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Judul *</label><input type="text" value={data.judul} onChange={(e) => setData('judul', e.target.value)} className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100" />{errors.judul && <p className="mt-1 text-xs text-red-500">{errors.judul}</p>}</div>
                     <div><label className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Konten *</label><textarea rows={6} value={data.konten} onChange={(e) => setData('konten', e.target.value)} className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100" />{errors.konten && <p className="mt-1 text-xs text-red-500">{errors.konten}</p>}</div>

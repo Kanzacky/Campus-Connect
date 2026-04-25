@@ -1,7 +1,6 @@
 import { Head, router, usePage, Link } from '@inertiajs/react';
+import { CheckCircle, XCircle, Trash2 } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
-import { Search, CheckCircle, XCircle, Trash2 } from 'lucide-react';
-import { useState } from 'react';
 
 interface Anggota { id: number; user_id: number; name: string; email: string; nim: string; jurusan: string; angkatan: string; jabatan: string; status: string; bergabung_pada: string; }
 interface Org { id: number; name: string; }
@@ -12,7 +11,6 @@ const statusColors: Record<string, string> = { aktif: 'bg-emerald-100 text-emera
 
 export default function AnggotaIndex() {
     const { anggota, organisasis, selectedOrgId, filters, flash } = usePage().props as unknown as Props;
-    const [search, setSearch] = useState(filters.search || '');
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -45,7 +43,11 @@ export default function AnggotaIndex() {
                                                 <button onClick={() => router.put(`/pengurus/anggota/${a.id}/approve`)} className="rounded-lg p-2 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20" title="Setujui"><CheckCircle className="h-4 w-4" /></button>
                                                 <button onClick={() => router.put(`/pengurus/anggota/${a.id}/reject`)} className="rounded-lg p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20" title="Tolak"><XCircle className="h-4 w-4" /></button>
                                             </>}
-                                            {a.status === 'aktif' && <button onClick={() => { if (confirm('Hapus anggota ini?')) router.delete(`/pengurus/anggota/${a.id}/remove`); }} className="rounded-lg p-2 text-zinc-500 hover:bg-red-50 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>}
+                                            {a.status === 'aktif' && <button onClick={() => {
+ if (confirm('Hapus anggota ini?')) {
+router.delete(`/pengurus/anggota/${a.id}/remove`);
+} 
+}} className="rounded-lg p-2 text-zinc-500 hover:bg-red-50 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>}
                                         </div>
                                     </td>
                                 </tr>

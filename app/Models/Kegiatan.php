@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Kegiatan extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'organisasi_id',
         'judul',

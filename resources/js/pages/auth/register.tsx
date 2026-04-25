@@ -1,12 +1,11 @@
 import { Head, router } from '@inertiajs/react';
+import { useState } from 'react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import { login } from '@/routes';
 import {
     Select,
     SelectContent,
@@ -14,7 +13,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { useState } from 'react';
+import { Spinner } from '@/components/ui/spinner';
+import { login } from '@/routes';
 
 export default function Register() {
     const [data, setData] = useState({
@@ -52,11 +52,14 @@ export default function Register() {
 
             if (!response.ok) {
                 const result = await response.json();
+
                 if (response.status === 422 && result.errors) {
                     const validationErrors: Record<string, string> = {};
+
                     for (const key in result.errors) {
                         validationErrors[key] = result.errors[key][0];
                     }
+
                     setErrors(validationErrors);
                 } else {
                     setApiError(result.message || 'Pendaftaran gagal.');
@@ -68,7 +71,7 @@ export default function Register() {
                     data: { status: 'Pendaftaran berhasil! Silakan login.' }
                 });
             }
-        } catch (error) {
+        } catch {
             setApiError('Terjadi kesalahan jaringan.');
         } finally {
             setProcessing(false);

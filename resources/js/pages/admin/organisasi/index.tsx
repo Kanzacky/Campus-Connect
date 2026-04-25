@@ -1,7 +1,7 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
 import { Plus, Search, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import AppLayout from '@/layouts/app-layout';
 
 interface Organisasi {
     id: number;

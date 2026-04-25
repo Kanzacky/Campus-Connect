@@ -14,7 +14,7 @@ class KegiatanFactory extends Factory
     public function definition(): array
     {
         $start = fake()->dateTimeBetween('+1 week', '+3 months');
-        $end = (clone $start)->modify('+' . rand(2, 8) . ' hours');
+        $end = (clone $start)->modify('+'.rand(2, 8).' hours');
 
         return [
             'organisasi_id' => Organisasi::factory(),

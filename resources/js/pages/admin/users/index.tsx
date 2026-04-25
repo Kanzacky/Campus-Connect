@@ -1,7 +1,7 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
 import { Plus, Search, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import AppLayout from '@/layouts/app-layout';
 
 interface User { id: number; name: string; email: string; role: string; nim: string; jurusan: string; angkatan: string; created_at: string; }
 interface Props { users: { data: User[]; links: Array<{ url: string | null; label: string; active: boolean }> }; filters: { search?: string; role?: string }; flash: { success?: string; error?: string }; }
@@ -12,8 +12,14 @@ export default function UsersIndex() {
     const { users, filters, flash } = usePage().props as unknown as Props;
     const [search, setSearch] = useState(filters.search || '');
 
-    function handleSearch(e: React.FormEvent) { e.preventDefault(); router.get('/admin/users', { search, role: filters.role }, { preserveState: true }); }
-    function handleDelete(id: number, name: string) { if (confirm(`Yakin ingin menghapus "${name}"?`)) { router.delete(`/admin/users/${id}`); } }
+    function handleSearch(e: React.FormEvent) {
+ e.preventDefault(); router.get('/admin/users', { search, role: filters.role }, { preserveState: true }); 
+}
+    function handleDelete(id: number, name: string) {
+ if (confirm(`Yakin ingin menghapus "${name}"?`)) {
+ router.delete(`/admin/users/${id}`); 
+} 
+}
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

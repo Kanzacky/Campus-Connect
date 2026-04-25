@@ -7,12 +7,15 @@ const breadcrumbs = [{ title: 'Pengurus Dashboard', href: '/pengurus/dashboard' 
 export default function KegiatanEdit({ kegiatan, organisasis }: { kegiatan: Kegiatan; organisasis: Org[] }) {
     const fmt = (d: string) => d ? new Date(d).toISOString().slice(0, 16) : '';
     const { data, setData, put, processing, errors } = useForm({ organisasi_id: kegiatan.organisasi_id.toString(), judul: kegiatan.judul, deskripsi: kegiatan.deskripsi, tanggal_mulai: fmt(kegiatan.tanggal_mulai), tanggal_selesai: fmt(kegiatan.tanggal_selesai), lokasi: kegiatan.lokasi, status: kegiatan.status });
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Edit Kegiatan" />
             <div className="mx-auto max-w-3xl p-4 md:p-6">
                 <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-100">Edit Kegiatan</h1>
-                <form onSubmit={(e) => { e.preventDefault(); put(`/pengurus/kegiatan/${kegiatan.id}`); }} className="space-y-6 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+                <form onSubmit={(e) => {
+ e.preventDefault(); put(`/pengurus/kegiatan/${kegiatan.id}`); 
+}} className="space-y-6 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
                     <div className="grid gap-6 sm:grid-cols-2">
                         <div><label className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Organisasi</label><select value={data.organisasi_id} onChange={(e) => setData('organisasi_id', e.target.value)} className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">{organisasis.map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}</select></div>
                         <div><label className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Judul *</label><input type="text" value={data.judul} onChange={(e) => setData('judul', e.target.value)} className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100" />{errors.judul && <p className="mt-1 text-xs text-red-500">{errors.judul}</p>}</div>

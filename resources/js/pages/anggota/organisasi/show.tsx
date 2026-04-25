@@ -1,6 +1,6 @@
 import { Head, router, usePage } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
 import { Users, Calendar, MapPin, LogIn, LogOut } from 'lucide-react';
+import AppLayout from '@/layouts/app-layout';
 
 interface Kegiatan { id: number; judul: string; tanggal_mulai: string; lokasi: string; }
 interface Organisasi { id: number; name: string; category: string; ketua: string; visi: string; misi: string; deskripsi: string; kontak: string; anggota_aktif_count: number; kegiatans: Kegiatan[]; }
@@ -30,7 +30,11 @@ export default function OrganisasiShow() {
                             <div>
                                 {!membershipStatus && <button onClick={() => router.post(`/anggota/organisasi/${organisasi.id}/join`)} className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-700"><LogIn className="h-4 w-4" /> Gabung</button>}
                                 {membershipStatus === 'pending' && <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-700">Menunggu Persetujuan</span>}
-                                {membershipStatus === 'aktif' && <button onClick={() => { if (confirm('Keluar?')) router.delete(`/anggota/organisasi/${organisasi.id}/leave`); }} className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50"><LogOut className="h-4 w-4" /> Keluar</button>}
+                                {membershipStatus === 'aktif' && <button onClick={() => {
+ if (confirm('Keluar?')) {
+router.delete(`/anggota/organisasi/${organisasi.id}/leave`);
+} 
+}} className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50"><LogOut className="h-4 w-4" /> Keluar</button>}
                             </div>
                         </div>
                     </div>

@@ -22,7 +22,7 @@ class PengurusPengumumanController extends Controller
         $query = Pengumuman::whereIn('organisasi_id', $orgIds)->with('organisasi:id,name');
 
         if ($request->filled('search')) {
-            $query->where('judul', 'like', '%' . $request->search . '%');
+            $query->where('judul', 'like', '%'.$request->search.'%');
         }
 
         $pengumumans = $query->latest()->paginate(10)->withQueryString();
@@ -50,7 +50,7 @@ class PengurusPengumumanController extends Controller
         $orgIds = $this->getOrgIds($request);
 
         $validated = $request->validate([
-            'organisasi_id' => 'required|exists:organisasis,id|in:' . $orgIds->implode(','),
+            'organisasi_id' => 'required|exists:organisasis,id|in:'.$orgIds->implode(','),
             'judul' => 'required|string|max:255',
             'konten' => 'required|string',
             'is_pinned' => 'boolean',

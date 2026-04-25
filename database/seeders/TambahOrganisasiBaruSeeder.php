@@ -178,7 +178,7 @@ class TambahOrganisasiBaruSeeder extends Seeder
 
         foreach ($organisasis as $org) {
             // Hanya tambahkan jika belum ada
-            if (!Organisasi::where('name', $org['name'])->exists()) {
+            if (! Organisasi::where('name', $org['name'])->exists()) {
                 Organisasi::create($org);
             }
         }

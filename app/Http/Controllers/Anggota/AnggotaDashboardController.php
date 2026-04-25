@@ -34,7 +34,7 @@ class AnggotaDashboardController extends Controller
         // Pengumuman terbaru (global + dari organisasi yang diikuti)
         $pengumumanTerbaru = Pengumuman::where(function ($q) use ($orgIds) {
             $q->whereNull('organisasi_id')
-              ->orWhereIn('organisasi_id', $orgIds);
+                ->orWhereIn('organisasi_id', $orgIds);
         })
             ->with('organisasi:id,name')
             ->latest()

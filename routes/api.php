@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrganisasiController;
-use App\Models\Organisasi;
 use Illuminate\Support\Facades\Route;
 
 /*

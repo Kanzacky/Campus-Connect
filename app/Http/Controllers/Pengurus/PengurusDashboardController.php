@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Pengurus;
 use App\Http\Controllers\Controller;
 use App\Models\Kegiatan;
 use App\Models\Organisasi;
-use App\Models\Pengumuman;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

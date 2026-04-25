@@ -14,7 +14,7 @@ class AdminKegiatanController extends Controller
         $query = Kegiatan::with(['organisasi:id,name', 'creator:id,name']);
 
         if ($request->filled('search')) {
-            $query->where('judul', 'like', '%' . $request->search . '%');
+            $query->where('judul', 'like', '%'.$request->search.'%');
         }
 
         if ($request->filled('status')) {

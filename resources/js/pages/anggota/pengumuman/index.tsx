@@ -1,6 +1,6 @@
 import { Head, usePage, Link } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
 import { Pin } from 'lucide-react';
+import AppLayout from '@/layouts/app-layout';
 
 interface Pengumuman { id: number; judul: string; konten: string; is_pinned: boolean; created_at: string; organisasi?: { name: string }; creator?: { name: string }; }
 interface Props { pengumumans: { data: Pengumuman[]; links: Array<{ url: string | null; label: string; active: boolean }> }; }
@@ -8,6 +8,7 @@ const breadcrumbs = [{ title: 'Dashboard', href: '/anggota/dashboard' }, { title
 
 export default function PengumumanIndex() {
     const { pengumumans } = usePage().props as unknown as Props;
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Pengumuman" />

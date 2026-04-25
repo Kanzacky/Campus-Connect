@@ -6,7 +6,9 @@ const breadcrumbs = [{ title: 'Admin Dashboard', href: '/admin' }, { title: 'Use
 export default function UsersCreate() {
     const { data, setData, post, processing, errors } = useForm({ name: '', email: '', password: '', password_confirmation: '', role: 'anggota', nim: '', jurusan: '', angkatan: '', no_hp: '' });
 
-    function handleSubmit(e: React.FormEvent) { e.preventDefault(); post('/admin/users'); }
+    function handleSubmit(e: React.FormEvent) {
+ e.preventDefault(); post('/admin/users'); 
+}
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

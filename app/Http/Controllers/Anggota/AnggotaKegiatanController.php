@@ -19,7 +19,7 @@ class AnggotaKegiatanController extends Controller
             ->with('organisasi:id,name');
 
         if ($request->filled('search')) {
-            $query->where('judul', 'like', '%' . $request->search . '%');
+            $query->where('judul', 'like', '%'.$request->search.'%');
         }
 
         $kegiatans = $query->orderBy('tanggal_mulai', 'desc')->paginate(10)->withQueryString();

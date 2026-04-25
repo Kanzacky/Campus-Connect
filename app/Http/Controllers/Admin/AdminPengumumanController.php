@@ -14,7 +14,7 @@ class AdminPengumumanController extends Controller
         $query = Pengumuman::with(['organisasi:id,name', 'creator:id,name']);
 
         if ($request->filled('search')) {
-            $query->where('judul', 'like', '%' . $request->search . '%');
+            $query->where('judul', 'like', '%'.$request->search.'%');
         }
 
         $pengumumans = $query->latest()->paginate(10)->withQueryString();

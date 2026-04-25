@@ -22,7 +22,7 @@ class OrganisasiFactory extends Factory
         ];
 
         return [
-            'name' => 'UKM ' . fake()->unique()->words(2, true),
+            'name' => 'UKM '.fake()->unique()->words(2, true),
             'category' => fake()->randomElement($categories),
             'ketua' => fake()->name(),
             'visi' => fake()->sentence(10),

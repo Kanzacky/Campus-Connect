@@ -1,7 +1,6 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Plus, Pencil, Trash2, Pin } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
-import { Plus, Search, Pencil, Trash2, Pin } from 'lucide-react';
-import { useState } from 'react';
 
 interface Pengumuman { id: number; judul: string; konten: string; is_pinned: boolean; created_at: string; organisasi?: { id: number; name: string }; creator?: { id: number; name: string }; }
 interface Props { pengumumans: { data: Pengumuman[]; links: Array<{ url: string | null; label: string; active: boolean }> }; filters: { search?: string }; flash: { success?: string }; }
@@ -9,8 +8,7 @@ interface Props { pengumumans: { data: Pengumuman[]; links: Array<{ url: string 
 const breadcrumbs = [{ title: 'Admin Dashboard', href: '/admin' }, { title: 'Pengumuman', href: '/admin/pengumuman' }];
 
 export default function PengumumanIndex() {
-    const { pengumumans, filters, flash } = usePage().props as unknown as Props;
-    const [search, setSearch] = useState(filters.search || '');
+    const { pengumumans, flash } = usePage().props as unknown as Props;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -35,7 +33,11 @@ export default function PengumumanIndex() {
                                 </div>
                                 <div className="flex gap-1">
                                     <Link href={`/admin/pengumuman/${p.id}/edit`} className="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 hover:text-indigo-600 dark:hover:bg-zinc-800"><Pencil className="h-4 w-4" /></Link>
-                                    <button onClick={() => { if (confirm('Yakin?')) router.delete(`/admin/pengumuman/${p.id}`); }} className="rounded-lg p-2 text-zinc-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20"><Trash2 className="h-4 w-4" /></button>
+                                    <button onClick={() => {
+ if (confirm('Yakin?')) {
+router.delete(`/admin/pengumuman/${p.id}`);
+} 
+}} className="rounded-lg p-2 text-zinc-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20"><Trash2 className="h-4 w-4" /></button>
                                 </div>
                             </div>
                         </div>

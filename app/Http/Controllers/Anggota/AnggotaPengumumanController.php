@@ -17,11 +17,11 @@ class AnggotaPengumumanController extends Controller
         // Global + organisasi yang diikuti
         $query = Pengumuman::where(function ($q) use ($orgIds) {
             $q->whereNull('organisasi_id')
-              ->orWhereIn('organisasi_id', $orgIds);
+                ->orWhereIn('organisasi_id', $orgIds);
         })->with(['organisasi:id,name', 'creator:id,name']);
 
         if ($request->filled('search')) {
-            $query->where('judul', 'like', '%' . $request->search . '%');
+            $query->where('judul', 'like', '%'.$request->search.'%');
         }
 
         $pengumumans = $query->orderByDesc('is_pinned')->latest()->paginate(10)->withQueryString();

@@ -1,6 +1,6 @@
 import { Head, usePage, Link } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
 import { Calendar, MapPin } from 'lucide-react';
+import AppLayout from '@/layouts/app-layout';
 
 interface Kegiatan { id: number; judul: string; deskripsi: string; tanggal_mulai: string; tanggal_selesai: string; lokasi: string; organisasi?: { name: string }; }
 interface Props { kegiatans: { data: Kegiatan[]; links: Array<{ url: string | null; label: string; active: boolean }> }; }
@@ -8,6 +8,7 @@ const breadcrumbs = [{ title: 'Dashboard', href: '/anggota/dashboard' }, { title
 
 export default function KegiatanIndex() {
     const { kegiatans } = usePage().props as unknown as Props;
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Kegiatan" />

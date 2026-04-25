@@ -7,7 +7,9 @@ const breadcrumbs = [{ title: 'Admin Dashboard', href: '/admin' }, { title: 'Use
 export default function UsersEdit({ editUser }: { editUser: User }) {
     const { data, setData, put, processing, errors } = useForm({ name: editUser.name, email: editUser.email, role: editUser.role, nim: editUser.nim || '', jurusan: editUser.jurusan || '', angkatan: editUser.angkatan || '', no_hp: editUser.no_hp || '', password: '', password_confirmation: '' });
 
-    function handleSubmit(e: React.FormEvent) { e.preventDefault(); put(`/admin/users/${editUser.id}`); }
+    function handleSubmit(e: React.FormEvent) {
+ e.preventDefault(); put(`/admin/users/${editUser.id}`); 
+}
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

@@ -1,6 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { dashboard, login, register } from '@/routes';
 import rmvunipma from '@/assets/rmvunipma.png';
+import { dashboard, login, register } from '@/routes';
 
 // Interface untuk model Organisasi dari Laravel
 interface Organisasi {
@@ -189,7 +189,7 @@ export default function Welcome({
                         {/* Database Data Display */}
                         {organisasis && organisasis.length > 0 ? (
                             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                                {organisasis.map((org, index) => (
+                                {organisasis.map((org) => (
                                     <div
                                         key={org.id}
                                         className="group relative top-0 flex h-full cursor-pointer flex-col border border-slate-200 bg-white shadow-sm transition-all duration-500 hover:-top-2 hover:shadow-2xl"

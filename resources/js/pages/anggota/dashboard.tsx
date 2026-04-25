@@ -1,6 +1,6 @@
 import { Head, usePage } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
 import { Building2, Calendar, Megaphone, Clock, Users } from 'lucide-react';
+import AppLayout from '@/layouts/app-layout';
 
 interface Organisasi { id: number; name: string; category: string; anggota_aktif_count: number; pivot: { jabatan: string }; }
 interface Kegiatan { id: number; judul: string; tanggal_mulai: string; organisasi?: { name: string }; }

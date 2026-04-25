@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Pengurus;
 
 use App\Http\Controllers\Controller;
 use App\Models\Organisasi;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -47,7 +46,7 @@ class PengurusAnggotaController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('users.name', 'like', "%{$search}%")
-                  ->orWhere('users.nim', 'like', "%{$search}%");
+                    ->orWhere('users.nim', 'like', "%{$search}%");
             });
         }
 
