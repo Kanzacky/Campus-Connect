@@ -26,15 +26,25 @@ export default function AnggotaKegiatanPage() {
       return;
     }
 
-    anggotaApi.kegiatan
-      .list({ per_page: 50 })
-      .then((res) => {
-        const payload = res.data as any;
-        const paginated = payload?.kegiatans as PaginatedResponse<Kegiatan> | undefined;
-        const list = Array.isArray(paginated?.data) ? paginated.data : [];
-        setItems(list);
-      })
-      .finally(() => setLoading(false));
+    const fetchKegiatan = () => {
+      anggotaApi.kegiatan
+        .list({ per_page: 50 })
+        .then((res) => {
+          const payload = res.data as any;
+          const paginated = payload?.kegiatans as PaginatedResponse<Kegiatan> | undefined;
+          const list = Array.isArray(paginated?.data) ? paginated.data : [];
+          setItems(list);
+        })
+        .finally(() => setLoading(false));
+    };
+
+    fetchKegiatan();
+
+    const intervalId = setInterval(() => {
+      fetchKegiatan();
+    }, 3000);
+
+    return () => clearInterval(intervalId);
   }, [authLoading, isAuthenticated, user, router]);
 
   if (authLoading || loading) {

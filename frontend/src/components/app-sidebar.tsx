@@ -92,7 +92,7 @@ export function AppSidebar() {
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
+                        <SidebarMenuButton size="lg" className="hover:bg-transparent active:bg-transparent focus-visible:ring-0" asChild>
                             <Link href={dashboardHref} prefetch>
                                 <AppLogo />
                             </Link>

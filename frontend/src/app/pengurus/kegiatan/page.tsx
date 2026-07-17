@@ -32,15 +32,25 @@ export default function PengurusKegiatanPage() {
       return;
     }
 
-    pengurusApi.kegiatan
-      .list({ per_page: 50 })
-      .then((res) => {
-        const payload = res.data as any;
-        const paginated = payload?.kegiatans as PaginatedResponse<Kegiatan> | undefined;
-        const list = Array.isArray(paginated?.data) ? paginated.data : [];
-        setItems(list);
-      })
-      .finally(() => setLoading(false));
+    const fetchKegiatan = () => {
+      pengurusApi.kegiatan
+        .list({ per_page: 50 })
+        .then((res) => {
+          const payload = res.data as any;
+          const paginated = payload?.kegiatans as PaginatedResponse<Kegiatan> | undefined;
+          const list = Array.isArray(paginated?.data) ? paginated.data : [];
+          setItems(list);
+        })
+        .finally(() => setLoading(false));
+    };
+
+    fetchKegiatan();
+
+    const intervalId = setInterval(() => {
+      fetchKegiatan();
+    }, 3000);
+
+    return () => clearInterval(intervalId);
   }, [authLoading, isAuthenticated, user, router]);
 
   async function handleDelete(id: number) {

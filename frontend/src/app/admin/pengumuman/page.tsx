@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/layouts/app-layout';
@@ -20,6 +20,32 @@ export default function AdminPengumumanPage() {
   const [items, setItems] = useState<Pengumuman[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<number | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const prevFirstId = useRef<number | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 5000);
+  };
+
+  const fetchPengumuman = () => {
+    adminApi.pengumuman
+      .list({ per_page: 50 })
+      .then((res) => {
+        const payload = res.data as any;
+        const paginated = payload?.pengumumans as PaginatedResponse<Pengumuman> | undefined;
+        const list = Array.isArray(paginated?.data) ? paginated.data : [];
+        
+        const firstId = list.length > 0 ? list[0].id : null;
+        if (prevFirstId.current !== null && firstId !== null && firstId !== prevFirstId.current) {
+          showToast('📢 Pengumuman Baru: ' + list[0].judul);
+        }
+        prevFirstId.current = firstId;
+
+        setItems(list);
+      })
+      .finally(() => setLoading(false));
+  };
 
   useEffect(() => {
     if (authLoading) return;
@@ -32,15 +58,14 @@ export default function AdminPengumumanPage() {
       return;
     }
 
-    adminApi.pengumuman
-      .list({ per_page: 50 })
-      .then((res) => {
-        const payload = res.data as any;
-        const paginated = payload?.pengumumans as PaginatedResponse<Pengumuman> | undefined;
-        const list = Array.isArray(paginated?.data) ? paginated.data : [];
-        setItems(list);
-      })
-      .finally(() => setLoading(false));
+    fetchPengumuman();
+
+    // Short Polling: Tarik data otomatis setiap 3 detik
+    const intervalId = setInterval(() => {
+      fetchPengumuman();
+    }, 3000);
+
+    return () => clearInterval(intervalId);
   }, [authLoading, isAuthenticated, user, router]);
 
   async function handleDelete(id: number) {
@@ -122,6 +147,7 @@ export default function AdminPengumumanPage() {
           )}
         </div>
       </div>
+
     </AppLayout>
   );
 }

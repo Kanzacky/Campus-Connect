@@ -55,11 +55,20 @@ class AnggotaOrganisasiController extends Controller
             ->where('organisasi_id', $id)
             ->value('status');
 
+        $members = DB::table('anggota_organisasi')
+            ->join('users', 'anggota_organisasi.user_id', '=', 'users.id')
+            ->where('anggota_organisasi.organisasi_id', $id)
+            ->where('anggota_organisasi.status', 'aktif')
+            ->select('users.id', 'users.name', 'users.nim', 'users.jurusan', 'anggota_organisasi.jabatan', 'anggota_organisasi.bergabung_pada')
+            ->orderBy('anggota_organisasi.bergabung_pada')
+            ->get();
+
         return response()->json([
             'success' => true,
             'data' => [
                 'organisasi' => new OrganisasiResource($organisasi),
                 'membershipStatus' => $membershipStatus,
+                'members' => $members,
             ],
         ]);
     }
@@ -68,12 +77,27 @@ class AnggotaOrganisasiController extends Controller
     {
         $organisasi = Organisasi::where('status', 'aktif')->findOrFail($id);
 
-        $exists = DB::table('anggota_organisasi')
+        $existing = DB::table('anggota_organisasi')
             ->where('user_id', auth()->id())
             ->where('organisasi_id', $id)
-            ->exists();
+            ->first();
 
-        if ($exists) {
+        if ($existing) {
+            if ($existing->status === 'ditolak') {
+                DB::table('anggota_organisasi')
+                    ->where('user_id', auth()->id())
+                    ->where('organisasi_id', $id)
+                    ->update([
+                        'status' => 'pending',
+                        'updated_at' => now(),
+                    ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Pendaftaran ulang berhasil! Menunggu persetujuan pengurus.',
+                ], 200);
+            }
+
             return response()->json([
                 'success' => false,
                 'message' => 'Anda sudah terdaftar di organisasi ini.',

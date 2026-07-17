@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/layouts/app-layout';
@@ -38,6 +38,13 @@ export default function PengurusAnggotaPage() {
   const [items, setItems] = useState<MembershipRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<number | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const prevPendingCount = useRef<number>(-1);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 5000);
+  };
 
   const queryParams = useMemo(() => {
     const params: Record<string, string | number> = { per_page: 12 };
@@ -57,22 +64,42 @@ export default function PengurusAnggotaPage() {
       return;
     }
 
-    setLoading(true);
-    pengurusApi.anggota
-      .list(queryParams)
-      .then((res) => {
-        const payload = res.data as any;
-        const orgs = (payload?.organisasis || []) as OrganisasiOption[];
-        setOrganisasis(orgs);
+    const fetchAnggota = (showLoading = false) => {
+      if (showLoading) setLoading(true);
+      pengurusApi.anggota
+        .list(queryParams)
+        .then((res) => {
+          const payload = res.data as any;
+          const orgs = (payload?.organisasis || []) as OrganisasiOption[];
+          setOrganisasis(orgs);
 
-        const selected = typeof payload?.selectedOrgId === 'number' ? (payload.selectedOrgId as number) : null;
-        setSelectedOrgId((prev) => prev ?? selected ?? (orgs[0]?.id ?? null));
+          const selected = typeof payload?.selectedOrgId === 'number' ? (payload.selectedOrgId as number) : null;
+          setSelectedOrgId((prev) => prev ?? selected ?? (orgs[0]?.id ?? null));
 
-        const paginated = payload?.anggota as { data?: MembershipRow[] } | undefined;
-        const list = Array.isArray(paginated?.data) ? paginated.data : [];
-        setItems(list);
-      })
-      .finally(() => setLoading(false));
+          const paginated = payload?.anggota as { data?: MembershipRow[] } | undefined;
+          const list = Array.isArray(paginated?.data) ? paginated.data : [];
+          
+          const currentPending = list.filter((x) => x.status === 'pending').length;
+          if (prevPendingCount.current !== -1 && currentPending > prevPendingCount.current) {
+            showToast('🔔 Ada pendaftar baru!');
+          }
+          prevPendingCount.current = currentPending;
+
+          setItems(list);
+        })
+        .finally(() => {
+          if (showLoading) setLoading(false);
+        });
+    };
+
+    fetchAnggota(true);
+
+    // Short Polling: Tarik data otomatis setiap 3 detik
+    const intervalId = setInterval(() => {
+      fetchAnggota(false);
+    }, 3000);
+
+    return () => clearInterval(intervalId);
   }, [authLoading, isAuthenticated, user, router, queryParams]);
 
   async function handleApprove(id: number) {
@@ -198,16 +225,16 @@ export default function PengurusAnggotaPage() {
                   {m.status === 'pending' && (
                     <>
                       <Button size="sm" disabled={busyId === m.id} onClick={() => handleApprove(m.id)}>
-                        {busyId === m.id ? '...' : 'Approve'}
+                        {busyId === m.id ? '...' : 'Terima'}
                       </Button>
                       <Button size="sm" variant="outline" disabled={busyId === m.id} onClick={() => handleReject(m.id)}>
-                        Reject
+                        Tolak
                       </Button>
                     </>
                   )}
                   {m.status === 'aktif' && (
                     <Button size="sm" variant="destructive" disabled={busyId === m.id} onClick={() => handleRemove(m.id)}>
-                      Remove
+                      Keluarkan
                     </Button>
                   )}
                 </div>
@@ -222,6 +249,7 @@ export default function PengurusAnggotaPage() {
           )}
         </div>
       </div>
+
     </AppLayout>
   );
 }

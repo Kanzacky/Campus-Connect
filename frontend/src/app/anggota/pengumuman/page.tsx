@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/layouts/app-layout';
@@ -18,6 +18,32 @@ export default function AnggotaPengumumanPage() {
   const { user, isLoading: authLoading, isAuthenticated } = useAuth();
   const [items, setItems] = useState<Pengumuman[]>([]);
   const [loading, setLoading] = useState(true);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const prevFirstId = useRef<number | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 5000);
+  };
+
+  const fetchPengumuman = () => {
+    anggotaApi.pengumuman
+      .list({ per_page: 50 })
+      .then((res) => {
+        const payload = res.data as any;
+        const paginated = payload?.pengumumans as PaginatedResponse<Pengumuman> | undefined;
+        const list = Array.isArray(paginated?.data) ? paginated.data : [];
+        
+        const firstId = list.length > 0 ? list[0].id : null;
+        if (prevFirstId.current !== null && firstId !== null && firstId !== prevFirstId.current) {
+          showToast('📢 Pengumuman Baru: ' + list[0].judul);
+        }
+        prevFirstId.current = firstId;
+
+        setItems(list);
+      })
+      .finally(() => setLoading(false));
+  };
 
   useEffect(() => {
     if (authLoading) return;
@@ -26,15 +52,14 @@ export default function AnggotaPengumumanPage() {
       return;
     }
 
-    anggotaApi.pengumuman
-      .list({ per_page: 50 })
-      .then((res) => {
-        const payload = res.data as any;
-        const paginated = payload?.pengumumans as PaginatedResponse<Pengumuman> | undefined;
-        const list = Array.isArray(paginated?.data) ? paginated.data : [];
-        setItems(list);
-      })
-      .finally(() => setLoading(false));
+    fetchPengumuman(); // Panggilan pertama
+
+    // Short Polling: Tarik data otomatis setiap 3 detik agar terasa Real-time
+    const intervalId = setInterval(() => {
+      fetchPengumuman();
+    }, 3000);
+
+    return () => clearInterval(intervalId); // Bersihkan interval saat pindah halaman
   }, [authLoading, isAuthenticated, user, router]);
 
   if (authLoading || loading) {
@@ -89,6 +114,7 @@ export default function AnggotaPengumumanPage() {
           )}
         </div>
       </div>
+
     </AppLayout>
   );
 }

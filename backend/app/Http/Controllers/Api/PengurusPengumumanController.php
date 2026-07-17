@@ -20,7 +20,10 @@ class PengurusPengumumanController extends Controller
     {
         $orgIds = $this->getOrgIds($request);
 
-        $query = Pengumuman::whereIn('organisasi_id', $orgIds)->with('organisasi:id,name');
+        $query = Pengumuman::where(function ($q) use ($orgIds) {
+            $q->whereNull('organisasi_id')
+                ->orWhereIn('organisasi_id', $orgIds);
+        })->with('organisasi:id,name');
 
         if ($request->filled('search')) {
             $query->where('judul', 'like', '%'.$request->search.'%');
